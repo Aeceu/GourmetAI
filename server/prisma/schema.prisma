@@ -9,8 +9,8 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid())
-  firstName String
-  lastName  String
+  firstName String?
+  lastName  String?
   email     String
   password  String
   createdAt DateTime @default(now())
@@ -19,6 +19,16 @@ model User {
   recipes     Recipe[]
 }
 
+model otp {
+  id String @id @default(uuid())
+  userId String 
+  otp String @db.Text()
+  createdAt String 
+  expiredAt String
+}
+
+
+
 model Ingredient {
   id        String   @id @default(uuid())
   name      String
@@ -26,15 +36,19 @@ model Ingredient {
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  recipeId String?
+  recipe   Recipe? @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model Recipe {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   name        String
-  description String   @db.Text()
-  isFavorite  Boolean  @default(false)
-  isComplete  Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  ingredients Ingredient[]
+  description String       @db.Text()
+  isFavorite  Boolean      @default(false)
+  isComplete  Boolean      @default(false)
+  createdAt   DateTime     @default(now())
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

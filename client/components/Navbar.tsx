@@ -1,9 +1,11 @@
+import { useGlobal } from "@/context/GlobalProvider";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 
 const Navbar = () => {
+  const { state, dispatch } = useGlobal();
   const [showNav, setShowNav] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -11,6 +13,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
     router.push("/(auth)/login");
   };
 
@@ -57,7 +60,7 @@ const Navbar = () => {
             </Text>
           </View>
 
-          <Link href={"/(home)/"} className="w-max">
+          <Link href={"/"} className="w-max">
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"
@@ -72,7 +75,7 @@ const Navbar = () => {
             </TouchableOpacity>
           </Link>
 
-          <Link href={"/(home)/"} className="w-max">
+          <Link href={"/"} className="w-max">
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"
@@ -87,7 +90,7 @@ const Navbar = () => {
             </TouchableOpacity>
           </Link>
 
-          <Link href={"/(home)/"} className="w-max">
+          <Link href={"/"} className="w-max">
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"
@@ -102,7 +105,7 @@ const Navbar = () => {
             </TouchableOpacity>
           </Link>
 
-          <Link href={"/(home)/"} className="w-max">
+          <Link href={"/"} className="w-max">
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"

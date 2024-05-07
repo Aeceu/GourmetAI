@@ -1,4 +1,7 @@
+import axios from "@/api/axios";
+import { useGlobal } from "@/context/GlobalProvider";
 import { router } from "expo-router";
+import { useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -8,8 +11,24 @@ import {
   View,
 } from "react-native";
 const verify = () => {
-  const handleSendCode = () => {
-    router.push("/code");
+  const [otp, setOtp] = useState("");
+  const { state, dispatch } = useGlobal();
+  const [loading, setLoading] = useState(false);
+  const handleSendCode = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post("/verify", { userId: state.userId, otp });
+      console.log(res.data);
+      dispatch({ type: "SET_CURRENT_USER", payload: res.data.user });
+      dispatch({ type: "SET_USER_ID", payload: res.data.user.id });
+      console.log(res.data.user.id);
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      console.log("ERROR!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,18 +53,20 @@ const verify = () => {
       </View>
 
       <View className="w-full h-full p-8 space-y-4">
-        <Text>Phone Number:</Text>
+        <Text>Input Code:</Text>
         <TextInput
-          placeholder="+63...."
+          value={otp}
+          onChangeText={(e) => setOtp(e)}
           keyboardType="numeric"
           className="rounded-md w-full bg-white shadow-md shadow-black px-4 py-2"
         />
         <TouchableOpacity
+          disabled={loading}
           onPress={handleSendCode}
           className="rounded-md bg-[#FF9900] p-2 flex items-center justify-center shadow-md shadow-black"
         >
           <Text className="text-white font-poppins-regular text-lg font-bold">
-            Send Code
+            {loading ? "Sending code..." : "Send Code"}
           </Text>
         </TouchableOpacity>
       </View>
