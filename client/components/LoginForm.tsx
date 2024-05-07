@@ -16,7 +16,7 @@ const LoginForm = () => {
 
   function showToast() {
     ToastAndroid.show("Request sent successfully!", ToastAndroid.SHORT);
-    router.replace("/(home)/");
+    router.replace("/verify");
   }
 
   return (

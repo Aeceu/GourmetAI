@@ -40,4 +40,3 @@ const CreateNewRecipe = () => {
   );
 };
 export default CreateNewRecipe;
-const styles = StyleSheet.create({});

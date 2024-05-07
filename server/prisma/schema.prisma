@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  password  String
+  createdAt DateTime @default(now())
+
+  ingredients Ingredient[]
+  recipes     Recipe[]
+}
+
+model Ingredient {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Recipe {
+  id          String   @id @default(uuid())
+  name        String
+  description String   @db.Text()
+  isFavorite  Boolean  @default(false)
+  isComplete  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

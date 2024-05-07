@@ -10,10 +10,12 @@ import {
   View,
 } from "react-native";
 const MyIngredients = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [newIngredient, setNewIngredient] = useState<string>("");
+  const [ingredients, setIngredients] = useState<string[]>([]);
 
   const handleAddnewIngredient = () => {
-    ToastAndroid.show("New ingredient added!", ToastAndroid.SHORT);
+    ToastAndroid.show(newIngredient, ToastAndroid.SHORT);
   };
 
   return (
@@ -60,7 +62,11 @@ const MyIngredients = () => {
           </View>
           <View className="p-4 space-y-2">
             <Text className="font-poppins-regular">Ingredient name</Text>
-            <TextInput className="rounded-md px-4 py-2 bg-[#FFFBFB] shadow-md shadow-black/50 border border-black/5" />
+            <TextInput
+              value={newIngredient}
+              onChangeText={(e) => setNewIngredient(e)}
+              className="rounded-md px-4 py-2 bg-[#FFFBFB] shadow-md shadow-black/50 border border-black/5"
+            />
             <View className="w-full flex justify-end items-end">
               <Pressable onPress={handleAddnewIngredient}>
                 <Text className=" text-lg bg-orange-500 rounded-md text-white px-4 py-1.5 shadow-md shadow-black/50 ">
