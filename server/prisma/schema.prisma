@@ -37,14 +37,11 @@ model Ingredient {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  recipeId String?
-  recipe   Recipe? @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model Recipe {
   id          String       @id @default(uuid())
   name        String
-  ingredients Ingredient[]
   description String       @db.Text()
   isFavorite  Boolean      @default(false)
   isComplete  Boolean      @default(false)

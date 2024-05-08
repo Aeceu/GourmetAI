@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-type User = {
+export type User = {
   id: string;
   firstName?: string | null;
   lastName?: string | null;
@@ -17,7 +17,7 @@ type User = {
   createdAt: string;
 };
 
-type Ingredient = {
+export type Ingredient = {
   id: string;
   name: string;
   createdAt: Date;
@@ -39,6 +39,7 @@ type Action =
   | { type: "SET_IS_LOGGED"; payload: boolean }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_CURRENT_INGREDIENTS"; payload: Ingredient[] }
+  | { type: "ADD_TO_CURRENT_INGREDIENTS"; payload: Ingredient }
   | { type: "DELETE_ONE_INGREDIENT"; payload: string };
 
 const initialState: GlobalState = {
@@ -77,6 +78,8 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
       return { ...state, loading: action.payload };
     case "SET_CURRENT_INGREDIENTS":
       return { ...state, ingredients: action.payload };
+    case "ADD_TO_CURRENT_INGREDIENTS":
+      return { ...state, ingredients: [...state.ingredients, action.payload] };
     case "DELETE_ONE_INGREDIENT":
       return {
         ...state,

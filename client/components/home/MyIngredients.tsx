@@ -29,7 +29,7 @@ const MyIngredients = () => {
       const res = await axios.post(`/ingredients/${state.userId}`, {
         ingredient: newIngredient,
       });
-      dispatch({ type: "SET_CURRENT_INGREDIENTS", payload: res.data });
+      dispatch({ type: "ADD_TO_CURRENT_INGREDIENTS", payload: res.data });
       console.log(res.data);
       ToastAndroid.show("New ingredient added!", ToastAndroid.SHORT);
     } catch (error) {
@@ -85,17 +85,23 @@ const MyIngredients = () => {
           <Text className="font-poor-story text-orange-500 text-3xl">
             My Ingredients
           </Text>
-          {state.ingredients.map((item, idex) => (
-            <TouchableOpacity
-              key={idex}
-              onPress={() => {
-                setCurrItemId(item.id);
-                setShowDeleteModal(true);
-              }}
-            >
-              <Text className="font-poor-story text-2xl">• {item.name}</Text>
-            </TouchableOpacity>
-          ))}
+          {state.ingredients.length <= 0 ? (
+            <Text className="font-poor-story text-2xl text-black/50">
+              No available Ingredients.
+            </Text>
+          ) : (
+            state.ingredients.map((item, idex) => (
+              <TouchableOpacity
+                key={idex}
+                onPress={() => {
+                  setCurrItemId(item.id);
+                  setShowDeleteModal(true);
+                }}
+              >
+                <Text className="font-poor-story text-2xl">• {item.name}</Text>
+              </TouchableOpacity>
+            ))
+          )}
         </ScrollView>
         <View className="w-full flex flex-row p-4 items-center justify-end">
           <Pressable

@@ -75,7 +75,7 @@ const Navbar = () => {
             </TouchableOpacity>
           </Link>
 
-          <Link href={"/"} className="w-max">
+          <Link href={"/(recipe)/recipe"} className="w-max">
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"
