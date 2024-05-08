@@ -24,9 +24,20 @@ export type Ingredient = {
   userId: string;
 };
 
+export type Recipe = {
+  id: string;
+  name: string;
+  description: string;
+  isFavorite: boolean;
+  isComplete: boolean;
+  createdAt: Date;
+  userId: string;
+};
+
 type GlobalState = {
   currentUser: User | null;
   ingredients: Ingredient[];
+  recipes: Recipe[];
   userId: string;
   isLogged: boolean;
   loading: boolean;
@@ -40,11 +51,17 @@ type Action =
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_CURRENT_INGREDIENTS"; payload: Ingredient[] }
   | { type: "ADD_TO_CURRENT_INGREDIENTS"; payload: Ingredient }
-  | { type: "DELETE_ONE_INGREDIENT"; payload: string };
+  | { type: "DELETE_ONE_INGREDIENT"; payload: string }
+  | { type: "SET_CURRENT_RECIPE"; payload: Recipe[] }
+  | { type: "ADD_TO_CURRENT_RECIPES"; payload: Recipe }
+  | { type: "REMOVE_FROM_CURRENT_RECIPES"; payload: string }
+  | { type: "UPDATE_RECIPE_IF_FAVORITE"; payload: string }
+  | { type: "UPDATE_RECIPE_IF_COMPLETED"; payload: string };
 
 const initialState: GlobalState = {
   currentUser: null,
   ingredients: [],
+  recipes: [],
   userId: "",
   isLogged: false,
   loading: false,
@@ -69,6 +86,7 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
         userId: "",
         loading: false,
         ingredients: [],
+        recipes: [],
       };
     case "SET_USER_ID":
       return { ...state, userId: action.payload };
@@ -85,6 +103,33 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
         ...state,
         ingredients: state.ingredients.filter(
           (item) => item.id !== action.payload
+        ),
+      };
+    case "SET_CURRENT_RECIPE":
+      return { ...state, recipes: action.payload };
+    case "ADD_TO_CURRENT_RECIPES":
+      return { ...state, recipes: [...state.recipes, action.payload] };
+    case "REMOVE_FROM_CURRENT_RECIPES":
+      return {
+        ...state,
+        recipes: state.recipes.filter((item) => item.id !== action.payload),
+      };
+    case "UPDATE_RECIPE_IF_FAVORITE":
+      return {
+        ...state,
+        recipes: state.recipes.map((item) =>
+          item.id === action.payload
+            ? { ...item, isFavorite: !item.isFavorite }
+            : item
+        ),
+      };
+    case "UPDATE_RECIPE_IF_COMPLETED":
+      return {
+        ...state,
+        recipes: state.recipes.map((item) =>
+          item.id === action.payload
+            ? { ...item, isComplete: !item.isComplete }
+            : item
         ),
       };
     default:

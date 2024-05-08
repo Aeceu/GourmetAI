@@ -71,17 +71,14 @@ const MyIngredients = () => {
   }, []);
 
   return (
-    <ScrollView
-      className="bg-white p-4"
-      contentContainerStyle={{ height: "100%" }}
-    >
+    <View className="bg-white p-4 min-h-[500px] h-[500px]">
       <View className=" w-full h-full  relative ">
         <Image
           source={require("@/assets/images/nb.jpg")}
           className="w-full h-full opacity-50 rounded-md absolute top-0 left-0"
           resizeMode="stretch"
         />
-        <ScrollView className="flex-col gap-2 p-2">
+        <View className="relative flex-col h-full p-2">
           <Text className="font-poor-story text-orange-500 text-3xl">
             My Ingredients
           </Text>
@@ -102,8 +99,8 @@ const MyIngredients = () => {
               </TouchableOpacity>
             ))
           )}
-        </ScrollView>
-        <View className="w-full flex flex-row p-4 items-center justify-end">
+        </View>
+        <View className="w-full flex flex-row p-4 items-center justify-end absolute right-0 bottom-0">
           <Pressable
             onPress={() => setShowModal(!showModal)}
             className="bg-white rounded-full shadow-md shadow-black"
@@ -131,7 +128,7 @@ const MyIngredients = () => {
         setShowModal={setShowDeleteModal}
         showModal={showDeleteModal}
       />
-    </ScrollView>
+    </View>
   );
 };
 export default MyIngredients;

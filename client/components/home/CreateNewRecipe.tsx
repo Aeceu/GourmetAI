@@ -1,11 +1,13 @@
 import axios from "@/api/axios";
 import { Ingredient, useGlobal } from "@/context/GlobalProvider";
+import { renderFormattedText } from "@/utils/formatText";
 import { useState } from "react";
 import {
   Image,
   Pressable,
   ScrollView,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -61,19 +63,6 @@ const CreateNewRecipe = () => {
     }
   };
 
-  const renderFormattedText = (text: string) => {
-    // Replace '**' with React Native's text styling syntax for bold
-    let formattedText = text.replace(/\*\*(.*?)\*\*/g, "$1");
-    // Replace '\n\n' with newline character in React Native
-    formattedText = formattedText.replace(/\n\n/g, "\n");
-    // Replace '*' with bullet point unicode character
-    formattedText = formattedText.replace(/\*/g, "\u2022");
-    // Replace '\n' with newline character in React Native
-    formattedText = formattedText.replace(/\n/g, "\n\n");
-    // Return the processed text
-    return formattedText;
-  };
-
   const handleDeleteRecipe = () => {
     handleReset();
   };
@@ -98,6 +87,8 @@ const CreateNewRecipe = () => {
         ingredeitns: selectedIngredients,
       });
       console.log(res.data);
+      dispatch({ type: "ADD_TO_CURRENT_RECIPES", payload: res.data });
+      ToastAndroid.show("New recipe added!", ToastAndroid.SHORT);
     } catch (error) {
       console.log(error);
     } finally {
@@ -107,17 +98,14 @@ const CreateNewRecipe = () => {
   };
 
   return (
-    <ScrollView
-      className="bg-white p-4"
-      contentContainerStyle={{ height: "100%" }}
-    >
+    <View className="bg-white p-4 min-h-[500px] h-[500px]">
       <View className=" w-full h-full  relative ">
         <Image
           source={require("@/assets/images/nb.jpg")}
           className="w-full h-full opacity-50 rounded-md absolute top-0 left-0"
           resizeMode="stretch"
         />
-        <ScrollView className="flex-col gap-2 p-2">
+        <View className="flex-col gap-2 p-2 h-full relative">
           <Text className="font-poor-story text-orange-500 text-3xl">
             Create new recipe
           </Text>
@@ -155,8 +143,8 @@ const CreateNewRecipe = () => {
               </TouchableOpacity>
             ))
           )}
-        </ScrollView>
-        <View className="w-full flex flex-row p-4 items-center justify-end">
+        </View>
+        <View className="w-full flex flex-row p-4 items-center justify-end absolute bottom-0 right-0">
           <Pressable
             disabled={loading}
             onPress={handleCreateRecipe}
@@ -179,33 +167,35 @@ const CreateNewRecipe = () => {
           animationIn={"slideInUp"}
           animationOut={"slideOutDown"}
         >
-          <Text className="rounded-t-md text-2xl font-poor-story text-white bg-orange-400 p-2">
-            Created Recipe
-          </Text>
-          <ScrollView className="bg-white p-2 ">
-            <Text>{renderFormattedText(recipeText)}</Text>
+          <ScrollView className="h-full rounded-t-md ">
+            <Text className="rounded-t-md text-2xl font-poor-story text-white bg-orange-400 p-2">
+              Created Recipe
+            </Text>
+            <Text className="p-2 bg-white">
+              {renderFormattedText(recipeText)}
+            </Text>
+            <View className="w-full bg-orange-400 p-2 flex-row items-end justify-end">
+              <TouchableOpacity
+                onPress={handleSaveRecipe}
+                className="bg-white  px-2 py-1 rounded-md shadow-md shadow-black"
+              >
+                <Text className="text-orange-400 font-poor-story text-lg">
+                  {loadingSaving ? "Saving..." : "Save Recipe"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleDeleteRecipe}
+                className="ml-4 bg-white  px-2 py-1 rounded-md shadow-md shadow-black"
+              >
+                <Text className="text-red-400 font-poor-story text-lg">
+                  Delete Recipe
+                </Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
-          <View className="bg-orange-400 p-2 flex-row items-end justify-end">
-            <TouchableOpacity
-              onPress={handleSaveRecipe}
-              className="bg-white  px-2 py-1 rounded-md shadow-md shadow-black"
-            >
-              <Text className="text-orange-400 font-poor-story text-lg">
-                {loadingSaving ? "Saving..." : "Save Recipe"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleDeleteRecipe}
-              className="ml-4 bg-white  px-2 py-1 rounded-md shadow-md shadow-black"
-            >
-              <Text className="text-red-400 font-poor-story text-lg">
-                Delete Recipe
-              </Text>
-            </TouchableOpacity>
-          </View>
         </Modal>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 export default CreateNewRecipe;

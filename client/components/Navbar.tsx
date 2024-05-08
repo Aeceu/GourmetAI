@@ -9,12 +9,13 @@ const Navbar = () => {
   const [showNav, setShowNav] = useState<boolean>(false);
 
   const handleClick = () => {
+    router.push("/recipe");
     setShowNav(false);
   };
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    router.push("/(auth)/login");
+    // router.push("/(auth)/login");
   };
 
   return (
@@ -60,7 +61,7 @@ const Navbar = () => {
             </Text>
           </View>
 
-          <Link href={"/"} className="w-max">
+          <Pressable onPress={() => router.replace("/home")} className="w-max">
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"
@@ -73,9 +74,12 @@ const Navbar = () => {
                 Home
               </Text>
             </TouchableOpacity>
-          </Link>
+          </Pressable>
 
-          <Link href={"/(recipe)/recipe"} className="w-max">
+          <Pressable
+            onPress={() => router.replace("/recipe")}
+            className="w-max"
+          >
             <TouchableOpacity
               onPress={handleClick}
               className="flex-row gap-2 items-center"
@@ -88,7 +92,7 @@ const Navbar = () => {
                 Recipes
               </Text>
             </TouchableOpacity>
-          </Link>
+          </Pressable>
 
           <Link href={"/"} className="w-max">
             <TouchableOpacity

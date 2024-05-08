@@ -5,7 +5,8 @@ import { StyleSheet, Text, View } from "react-native";
 const AuthLayout = () => {
   const { dispatch, state } = useGlobal();
 
-  if (!state.loading && state.isLogged) return <Redirect href={"/(home)/"} />;
+  if (!state.loading && state.isLogged)
+    return <Redirect href={"/(tabs)/home"} />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

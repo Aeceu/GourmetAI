@@ -136,7 +136,6 @@ export const completeRecipe = async (req: Request, res: Response) => {
 export const userRecipes = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-
     const recipes = await prisma.recipe.findMany({
       where: {
         userId,

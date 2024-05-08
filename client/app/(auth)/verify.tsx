@@ -22,7 +22,7 @@ const verify = () => {
       dispatch({ type: "SET_CURRENT_USER", payload: res.data.user });
       dispatch({ type: "SET_USER_ID", payload: res.data.user.id });
       console.log(res.data.user.id);
-      router.push("/");
+      router.push("/(tabs)/home");
     } catch (error) {
       console.log(error);
       console.log("ERROR!");
