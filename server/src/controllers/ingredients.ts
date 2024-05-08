@@ -23,7 +23,7 @@ export const getUserIngredients = async (req: Request, res: Response) => {
 export const addNewIngredient = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    const ingredient = req.body;
+    const { ingredient } = req.body;
 
     const newIngredient = await prisma.ingredient.create({
       data: {

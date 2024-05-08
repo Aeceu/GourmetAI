@@ -1,4 +1,6 @@
-import { useState } from "react";
+import axios from "@/api/axios";
+import { useGlobal } from "@/context/GlobalProvider";
+import { useEffect, useState } from "react";
 import {
   Image,
   Modal,
@@ -7,16 +9,66 @@ import {
   Text,
   TextInput,
   ToastAndroid,
+  TouchableOpacity,
   View,
 } from "react-native";
-const MyIngredients = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [newIngredient, setNewIngredient] = useState<string>("");
-  const [ingredients, setIngredients] = useState<string[]>([]);
+import AddNewIngredient from "../modal/AddNewIngredient";
+import DeleteIngredient from "../modal/DeleteIngredient";
 
-  const handleAddnewIngredient = () => {
-    ToastAndroid.show(newIngredient, ToastAndroid.SHORT);
+const MyIngredients = () => {
+  const { dispatch, state } = useGlobal();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [newIngredient, setNewIngredient] = useState<string>("");
+  const [currItemId, setCurrItemId] = useState<string>("");
+
+  const handleAddnewIngredient = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(`/ingredients/${state.userId}`, {
+        ingredient: newIngredient,
+      });
+      dispatch({ type: "SET_CURRENT_INGREDIENTS", payload: res.data });
+      console.log(res.data);
+      ToastAndroid.show("New ingredient added!", ToastAndroid.SHORT);
+    } catch (error) {
+      console.log(error);
+      ToastAndroid.show("Error!", ToastAndroid.SHORT);
+    } finally {
+      setLoading(false);
+      setNewIngredient("");
+    }
   };
+
+  const deleteIngredient = async (ingredientId: string) => {
+    try {
+      setLoading(true);
+      const res = await axios.delete(`/ingredients/${ingredientId}`);
+      dispatch({ type: "DELETE_ONE_INGREDIENT", payload: ingredientId });
+      console.log(res.data);
+      ToastAndroid.show("Ingredient deleted!", ToastAndroid.SHORT);
+    } catch (error) {
+      console.log(error);
+      ToastAndroid.show("Error!", ToastAndroid.SHORT);
+    } finally {
+      setLoading(false);
+      setShowDeleteModal(false);
+      setCurrItemId("");
+    }
+  };
+
+  useEffect(() => {
+    const fetchIngredient = async () => {
+      try {
+        const res = await axios.get(`/ingredients/${state.userId}`);
+        dispatch({ type: "SET_CURRENT_INGREDIENTS", payload: res.data });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchIngredient();
+  }, []);
 
   return (
     <ScrollView
@@ -33,10 +85,17 @@ const MyIngredients = () => {
           <Text className="font-poor-story text-orange-500 text-3xl">
             My Ingredients
           </Text>
-          <Text className="font-poor-story text-2xl">• Egg</Text>
-          <Text className="font-poor-story text-2xl">• Peanut</Text>
-          <Text className="font-poor-story text-2xl">• Mayonnaise</Text>
-          <Text className="font-poor-story text-2xl">• Onions</Text>
+          {state.ingredients.map((item, idex) => (
+            <TouchableOpacity
+              key={idex}
+              onPress={() => {
+                setCurrItemId(item.id);
+                setShowDeleteModal(true);
+              }}
+            >
+              <Text className="font-poor-story text-2xl">• {item.name}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
         <View className="w-full flex flex-row p-4 items-center justify-end">
           <Pressable
@@ -50,33 +109,22 @@ const MyIngredients = () => {
           </Pressable>
         </View>
       </View>
-      <Modal animationType="slide" transparent={true} visible={showModal}>
-        <View className="bg-white h-[39%] w-full rounded-t-2xl  bottom-0 absolute shadow-md shadow-black">
-          <View className="bg-orange-500 rounded-t-2xl flex flex-row  items-center justify-between px-4 py-2 ">
-            <Text className="text-white font-poor-story text-2xl">
-              Add new ingredient
-            </Text>
-            <Pressable onPress={() => setShowModal(!showModal)}>
-              <Text className="text-white text-lg">Close</Text>
-            </Pressable>
-          </View>
-          <View className="p-4 space-y-2">
-            <Text className="font-poppins-regular">Ingredient name</Text>
-            <TextInput
-              value={newIngredient}
-              onChangeText={(e) => setNewIngredient(e)}
-              className="rounded-md px-4 py-2 bg-[#FFFBFB] shadow-md shadow-black/50 border border-black/5"
-            />
-            <View className="w-full flex justify-end items-end">
-              <Pressable onPress={handleAddnewIngredient}>
-                <Text className=" text-lg bg-orange-500 rounded-md text-white px-4 py-1.5 shadow-md shadow-black/50 ">
-                  ADD
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+
+      <AddNewIngredient
+        handleAddnewIngredient={handleAddnewIngredient}
+        loading={loading}
+        newIngredient={newIngredient}
+        setNewIngredient={setNewIngredient}
+        setShowModal={setShowModal}
+        showModal={showModal}
+      />
+      <DeleteIngredient
+        currItemId={currItemId}
+        loading={loading}
+        deleteIngredient={deleteIngredient}
+        setShowModal={setShowDeleteModal}
+        showModal={showDeleteModal}
+      />
     </ScrollView>
   );
 };

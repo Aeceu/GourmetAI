@@ -9,7 +9,6 @@ import {
   useState,
 } from "react";
 
-// Define your user type based on the Prisma User model
 type User = {
   id: string;
   firstName?: string | null;
@@ -18,32 +17,38 @@ type User = {
   createdAt: string;
 };
 
-// Define your global state type
+type Ingredient = {
+  id: string;
+  name: string;
+  createdAt: Date;
+  userId: string;
+};
+
 type GlobalState = {
   currentUser: User | null;
+  ingredients: Ingredient[];
   userId: string;
   isLogged: boolean;
   loading: boolean;
-  // You can add more properties to your global state as needed
 };
 
-// Define actions
 type Action =
   | { type: "SET_CURRENT_USER"; payload: User }
   | { type: "LOGOUT" }
   | { type: "SET_USER_ID"; payload: string }
   | { type: "SET_IS_LOGGED"; payload: boolean }
-  | { type: "SET_LOADING"; payload: boolean };
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_CURRENT_INGREDIENTS"; payload: Ingredient[] }
+  | { type: "DELETE_ONE_INGREDIENT"; payload: string };
 
-// Define initial state
 const initialState: GlobalState = {
   currentUser: null,
+  ingredients: [],
   userId: "",
   isLogged: false,
   loading: false,
 };
 
-// Create context
 const GlobalContext = createContext<{
   state: GlobalState;
   dispatch: Dispatch<Action>;
@@ -52,7 +57,6 @@ const GlobalContext = createContext<{
   dispatch: () => null,
 });
 
-// Define reducer function
 const globalReducer = (state: GlobalState, action: Action): GlobalState => {
   switch (action.type) {
     case "SET_CURRENT_USER":
@@ -63,6 +67,7 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
         isLogged: false,
         userId: "",
         loading: false,
+        ingredients: [],
       };
     case "SET_USER_ID":
       return { ...state, userId: action.payload };
@@ -70,6 +75,15 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
       return { ...state, isLogged: action.payload };
     case "SET_LOADING":
       return { ...state, loading: action.payload };
+    case "SET_CURRENT_INGREDIENTS":
+      return { ...state, ingredients: action.payload };
+    case "DELETE_ONE_INGREDIENT":
+      return {
+        ...state,
+        ingredients: state.ingredients.filter(
+          (item) => item.id !== action.payload
+        ),
+      };
     default:
       return state;
   }
@@ -111,5 +125,4 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
   );
 };
 
-// Custom hook to use global state and dispatch
 export const useGlobal = () => useContext(GlobalContext);
