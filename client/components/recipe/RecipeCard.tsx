@@ -64,7 +64,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ item }) => {
   return (
     <View className="mt-2 w-full min-h-[100px] py-4 px-2 rounded-md shadow-md border border-black/5 bg-[#FFFBFB] relative flex-col justify-between">
       <View className="flex-row items-center justify-between mb-4">
-        <Text className="font-poor-story text-orange-400 text-xl">
+        <Text className="w-[80%] font-poor-story text-orange-400 text-xl">
           {item.name.trim()}
         </Text>
         <View className="flex-row items-center px-2">

@@ -54,7 +54,7 @@ const index = () => {
         </View>
 
         <View className="w-full  justify-center items-center p-4">
-          <View className="w-full rounded-md p-2 flex-col gap-2 bg-white shadow-md shadow-black ">
+          <View className="w-full rounded-md p-2 flex-col gap-2 bg-[#FFFBFB] shadow-md shadow-black ">
             <Text className="font-poor-story text-3xl text-orange-500">
               Kitchen Overview
             </Text>
@@ -69,60 +69,32 @@ const index = () => {
               Recipes on Hand:
               <Text className="text-orange-500"> {state.recipes.length}</Text>
             </Text>
-            <Text className="font-poor-story text-xl flex">
-              Favorite Recipes:
-              <Text className="text-orange-500"> 0</Text>
-            </Text>
-            <Text className="font-poor-story text-xl flex">
-              Completed Recipes:
-              <Text className="text-orange-500"> 0</Text>
-            </Text>
           </View>
         </View>
         <View>
           <ScrollView horizontal>
             <Text
               onPress={() => setCurr(0)}
-              className={`p-3 font-poor-story rounded-t-md  ${
+              className={`p-3 text-lg font-poor-story rounded-t-md  ${
                 curr == 0 &&
-                "text-orange-500 bg-white shadow-md shadow-black/50 border-black/5 border-x"
+                "text-orange-500  bg-[#FFFBFB] shadow-md shadow-black/50 border-black/5 border-x"
               }`}
             >
               My Ingredients
             </Text>
             <Text
               onPress={() => setCurr(1)}
-              className={`p-3 font-poor-story rounded-t-md  ${
+              className={`p-3 text-lg font-poor-story rounded-t-md  ${
                 curr == 1 &&
-                "text-orange-500 bg-white shadow-md shadow-black/50 border-black/5 border-x "
+                "text-orange-500  bg-[#FFFBFB] shadow-md shadow-black/50 border-black/5 border-x "
               }`}
             >
               Create new recipe
-            </Text>
-            <Text
-              onPress={() => setCurr(2)}
-              className={`p-3 font-poor-story rounded-t-md  ${
-                curr == 2 &&
-                "text-orange-500 bg-white shadow-md shadow-black/50 border-black/5 border-x "
-              }`}
-            >
-              Shopping Lists
-            </Text>
-            <Text
-              onPress={() => setCurr(3)}
-              className={`p-3 font-poor-story rounded-t-md  ${
-                curr == 3 &&
-                "text-orange-500 bg-white shadow-md shadow-black/50 border-black/5 border-x "
-              }`}
-            >
-              Recent Activities
             </Text>
           </ScrollView>
         </View>
         {curr == 0 && <MyIngredients />}
         {curr == 1 && <CreateNewRecipe />}
-        {curr == 2 && <ShoppingLists />}
-        {curr == 3 && <RecentActivities />}
       </ScrollView>
     </SafeAreaView>
   );

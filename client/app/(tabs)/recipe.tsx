@@ -38,7 +38,7 @@ const index = () => {
               onPress={() => setCurr(0)}
               className={`px-4 py-2 font-poor-story rounded-t-md  ${
                 curr == 0 &&
-                "bg-white shadow-md shadow-black/50 border-black/5 border-x"
+                "bg-[#FFFBFB] shadow-md shadow-black/50 border-black/5 border-x"
               }`}
             >
               Recipes
@@ -47,7 +47,7 @@ const index = () => {
               onPress={() => setCurr(1)}
               className={`px-4 py-2 font-poor-story rounded-t-md  ${
                 curr == 1 &&
-                "bg-white shadow-md shadow-black/50 border-black/5 border-x "
+                "bg-[#FFFBFB] shadow-md shadow-black/50 border-black/5 border-x "
               }`}
             >
               Favorite Recipes
@@ -56,7 +56,7 @@ const index = () => {
               onPress={() => setCurr(2)}
               className={`px-4 py-2 font-poor-story rounded-t-md  ${
                 curr == 2 &&
-                "bg-white shadow-md shadow-black/50 border-black/5 border-x "
+                "bg-[#FFFBFB] shadow-md shadow-black/50 border-black/5 border-x "
               }`}
             >
               Completed Recipes

@@ -98,7 +98,7 @@ const CreateNewRecipe = () => {
   };
 
   return (
-    <View className="bg-white p-4 min-h-[500px] h-[500px]">
+    <View className="bg-[#FFFBFB] p-4 min-h-[500px] h-[500px]">
       <View className=" w-full h-full  relative ">
         <Image
           source={require("@/assets/images/nb.jpg")}
