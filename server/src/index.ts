@@ -24,3 +24,5 @@ const PORT = process.env.PORT as string;
 app.listen(4200, "192.168.0.108", () => {
   console.log(`Listening to port ${PORT}`);
 });
+
+export default app;
