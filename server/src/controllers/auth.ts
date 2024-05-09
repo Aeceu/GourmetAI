@@ -130,17 +130,6 @@ export const verifyOTP = async (req: Request, res: Response) => {
 
     if (!user) return res.status(403).json("User does not exists!");
 
-    const user_data = {
-      email: user?.email,
-      id: user?.id,
-    };
-
-    res.cookie("auth", user_data, {
-      secure: true,
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60,
-    });
     const userWithoutPass = exclude(user, ["password"]);
 
     await prisma.otp.deleteMany({

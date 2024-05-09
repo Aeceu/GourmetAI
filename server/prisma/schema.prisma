@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL_1")
 }
 
 model User {
@@ -20,14 +20,12 @@ model User {
 }
 
 model otp {
-  id String @id @default(uuid())
-  userId String 
-  otp String @db.Text()
-  createdAt String 
+  id        String @id @default(uuid())
+  userId    String
+  otp       String
+  createdAt String
   expiredAt String
 }
-
-
 
 model Ingredient {
   id        String   @id @default(uuid())
@@ -36,16 +34,15 @@ model Ingredient {
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
 }
 
 model Recipe {
-  id          String       @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
-  description String       @db.Text()
-  isFavorite  Boolean      @default(false)
-  isComplete  Boolean      @default(false)
-  createdAt   DateTime     @default(now())
+  description String
+  isFavorite  Boolean  @default(false)
+  isComplete  Boolean  @default(false)
+  createdAt   DateTime @default(now())
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -39,9 +39,7 @@ const SignupForm = () => {
     }
     try {
       setLoading(true);
-      const res = await axios.post("/signup", data, {
-        withCredentials: true,
-      });
+      const res = await axios.post("/signup", data);
       console.log(res.data);
       ToastAndroid.show("SUCCESS!", ToastAndroid.SHORT);
       router.push("/(auth)/login");
