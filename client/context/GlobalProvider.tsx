@@ -151,7 +151,6 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
         const res = await axios.post("/user", {
           userId: state.userId,
         });
-        console.log(res.data);
         dispatch({ type: "SET_CURRENT_USER", payload: res.data });
         if (res.data) {
           dispatch({ type: "SET_IS_LOGGED", payload: true });
