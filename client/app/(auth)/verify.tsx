@@ -1,5 +1,6 @@
 import axios from "@/api/axios";
 import { useGlobal } from "@/context/GlobalProvider";
+import { AxiosError } from "axios";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -7,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -25,7 +27,16 @@ const verify = () => {
       router.push("/(tabs)/home");
     } catch (error) {
       console.log(error);
-      console.log("ERROR!");
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
     }

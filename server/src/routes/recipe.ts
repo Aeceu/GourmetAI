@@ -2,6 +2,7 @@ import express from "express";
 import {
   completeRecipe,
   createRecipe,
+  createRecipeByName,
   deleteRecipe,
   favRecipe,
   saveRecipe,
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.get("/recipe/:userId", userRecipes);
 router.post("/recipe", createRecipe);
+router.get("/recipeByName/:recipeName", createRecipeByName);
 router.delete("/:recipeId", deleteRecipe);
 
 router.post("/save/recipe/:userId", saveRecipe);

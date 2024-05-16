@@ -1,6 +1,7 @@
 import axios from "@/api/axios";
 import { Ingredient, useGlobal } from "@/context/GlobalProvider";
 import { renderFormattedText } from "@/utils/formatText";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import {
   Image,
@@ -57,6 +58,16 @@ const CreateNewRecipe = () => {
       setShowRecipeModal(true);
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
       // handleReset();
@@ -91,6 +102,16 @@ const CreateNewRecipe = () => {
       ToastAndroid.show("New recipe added!", ToastAndroid.SHORT);
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoadingSaving(false);
       handleReset();

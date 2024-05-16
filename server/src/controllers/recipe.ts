@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "../utils/prisma";
+
 const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY!);
 
 export const createRecipe = async (req: Request, res: Response) => {
@@ -11,6 +12,25 @@ export const createRecipe = async (req: Request, res: Response) => {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const prompt = `Imagine you're a student's chef tasked with creating a recipe using a specific set of ingredients. Your challenge is to come up with a recipe name, along with a list of ingredients and instructions that the student can easily follow. You're only allowed to use the following ingredients: ${ingredients}. Get creative and craft a recipe that's both delicious and simple to prepare!`;
 
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    res.status(200).json(text);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+export const createRecipeByName = async (req: Request, res: Response) => {
+  try {
+    const recipeName = req.params.recipeName;
+    if (!recipeName) {
+      return res.status(400).json("Please put the name of the recipe!");
+    }
+
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const prompt = `Imagine you're a student's chef tasked with creating a recipe. Your challege is to come up with a recipe name, along with a list of ingredients and instructions that the student can easily follow. Get creating and craft a recipe that's both delicious and simple to prepare!, Here is the name of the recipe the student want: ${recipeName}`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();

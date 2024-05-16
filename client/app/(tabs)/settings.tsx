@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Modal from "react-native-modal";
+import { AxiosError } from "axios";
 export type TUpdateUserName = {
   firstName: string;
   lastName: string;
@@ -45,6 +46,16 @@ const settings = () => {
       );
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
       setShowUpdateName(false);
@@ -63,6 +74,16 @@ const settings = () => {
       handleLogout();
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
       setShowDeleteAccModal(false);

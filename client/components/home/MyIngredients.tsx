@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import AddNewIngredient from "../modal/AddNewIngredient";
 import DeleteIngredient from "../modal/DeleteIngredient";
+import { AxiosError } from "axios";
 
 const MyIngredients = () => {
   const { dispatch, state } = useGlobal();
@@ -34,7 +35,16 @@ const MyIngredients = () => {
       ToastAndroid.show("New ingredient added!", ToastAndroid.SHORT);
     } catch (error) {
       console.log(error);
-      ToastAndroid.show("Error!", ToastAndroid.SHORT);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
       setNewIngredient("");
@@ -50,7 +60,16 @@ const MyIngredients = () => {
       ToastAndroid.show("Ingredient deleted!", ToastAndroid.SHORT);
     } catch (error) {
       console.log(error);
-      ToastAndroid.show("Error!", ToastAndroid.SHORT);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
       setShowDeleteModal(false);
@@ -65,6 +84,16 @@ const MyIngredients = () => {
         dispatch({ type: "SET_CURRENT_INGREDIENTS", payload: res.data });
       } catch (error) {
         console.log(error);
+        if (error instanceof AxiosError) {
+          const axiosErr = error as AxiosError;
+          if (axiosErr.response && axiosErr.response.data) {
+            if (typeof axiosErr.response.data === "string") {
+              ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+            }
+          }
+        } else {
+          ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+        }
       }
     };
     fetchIngredient();

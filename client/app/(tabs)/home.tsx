@@ -4,10 +4,12 @@ import CreateNewRecipe from "@/components/home/CreateNewRecipe";
 import MyIngredients from "@/components/home/MyIngredients";
 import RecentActivities from "@/components/home/RecentActivities";
 import ShoppingLists from "@/components/home/ShoppingLists";
+import WantSpecificRecipe from "@/components/home/WantSpecificRecipe";
 import { useGlobal } from "@/context/GlobalProvider";
+import { AxiosError } from "axios";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const index = () => {
@@ -23,6 +25,16 @@ const index = () => {
         dispatch({ type: "SET_CURRENT_RECIPE", payload: res.data });
       } catch (error) {
         console.log(error);
+        if (error instanceof AxiosError) {
+          const axiosErr = error as AxiosError;
+          if (axiosErr.response && axiosErr.response.data) {
+            if (typeof axiosErr.response.data === "string") {
+              ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+            }
+          }
+        } else {
+          ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+        }
       } finally {
         setLoading(false);
       }
@@ -91,10 +103,20 @@ const index = () => {
             >
               Create new recipe
             </Text>
+            <Text
+              onPress={() => setCurr(2)}
+              className={`p-3 text-lg font-poor-story rounded-t-md  ${
+                curr == 2 &&
+                "text-orange-500  bg-[#FFFBFB] shadow-md shadow-black/50 border-black/5 border-x "
+              }`}
+            >
+              Want specific recipe
+            </Text>
           </ScrollView>
         </View>
         {curr == 0 && <MyIngredients />}
         {curr == 1 && <CreateNewRecipe />}
+        {curr == 2 && <WantSpecificRecipe />}
       </ScrollView>
     </SafeAreaView>
   );

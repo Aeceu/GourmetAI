@@ -44,15 +44,17 @@ const SignupForm = () => {
       ToastAndroid.show("SUCCESS!", ToastAndroid.SHORT);
       router.push("/(auth)/login");
     } catch (error) {
-      if (error === typeof AxiosError) {
-        const axioserr = error as AxiosError;
-        console.log("error");
-        if (typeof axioserr.response?.data === "string") {
-          console.log(axioserr.response?.data);
-        }
-      }
       console.log(error);
-      ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      if (error instanceof AxiosError) {
+        const axiosErr = error as AxiosError;
+        if (axiosErr.response && axiosErr.response.data) {
+          if (typeof axiosErr.response.data === "string") {
+            ToastAndroid.show(axiosErr.response.data, ToastAndroid.SHORT);
+          }
+        }
+      } else {
+        ToastAndroid.show("ERROR!", ToastAndroid.SHORT);
+      }
     } finally {
       setLoading(false);
       setData({
